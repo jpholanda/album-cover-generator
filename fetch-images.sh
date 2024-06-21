@@ -7,7 +7,6 @@ max_concurrent_requests=200
 fetch_image() {
     mbid="$1"
     curl -sL https://coverartarchive.org/release/"$mbid"/front-250 --output dataset/images/"$mbid".jpg
-    echo $mbid >> dataset/processed_ids
 }
 
 mkdir -p dataset/images
