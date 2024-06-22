@@ -16,7 +16,7 @@ class DatasetEntry:
         artist = f'<artist>{self.artist}</artist>'
         genres = ''.join(f'<genre>{genre}</genre>' for genre in self.genres)
         tracklist = ''.join(f'<track>{track}</track>' for track in self.tracklist)
-        return f'{title} - {artist} - {genres} - {tracklist}'
+        return f'{title}{artist}{genres}{tracklist}'
 
 
 def read_dataset():
