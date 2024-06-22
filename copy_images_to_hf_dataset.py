@@ -33,10 +33,10 @@ def copy_images_to_split(split):
         copy_image(file_name, split)
         index += 1
         if index % 100 == 0:
-            print(f'Copied {index}/{len(file_names)}')
+            print(f'Copied {index}/{len(file_names)} to {split}')
 
     if index % 100 != 0:
-        print(f'Copied {index}/{len(file_names)}')
+        print(f'Copied {index}/{len(file_names)} to {split}')
 
 
 if __name__ == '__main__':
