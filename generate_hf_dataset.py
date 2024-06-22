@@ -5,6 +5,7 @@ import random
 
 class DatasetEntry:
     def __init__(self, json_data):
+        self.id = json_data['id']
         self.title = json_data["title"]
         self.artist = json_data["artist"]
         self.genres = json_data["genres"]
