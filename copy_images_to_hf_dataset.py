@@ -15,18 +15,28 @@ def read_dataset_metadata(split):
 
 
 def copy_image(file_name, split):
-    if not os.path.exists(f'dataset/huggingface/{split}/{file_name}'):
-        if os.path.exists(f'dataset/images/{file_name}'):
-            shutil.copy(f'dataset/images/{file_name}', f'dataset/huggingface/{split}/{file_name}')
-            print(f'Copied {file_name} to {split} split')
-        else:
-            print(f'For {split} split: {file_name} is missing')
+    if os.path.exists(f'dataset/huggingface/{split}/{file_name}'):
+        return
+
+    if not os.path.exists(f'dataset/images/{file_name}'):
+        return
+
+    shutil.copy(f'dataset/images/{file_name}', f'dataset/huggingface/{split}/{file_name}')
 
 
 def copy_images_to_split(split):
     file_names = read_dataset_metadata(split)
+
+    index = 0
+
     for file_name in file_names:
         copy_image(file_name, split)
+        index += 1
+        if index % 100 == 0:
+            print(f'Copied {index}/{len(file_names)}')
+
+    if index % 100 != 0:
+        print(f'Copied {index}/{len(file_names)}')
 
 
 if __name__ == '__main__':
