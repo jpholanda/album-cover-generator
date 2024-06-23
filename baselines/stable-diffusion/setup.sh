@@ -1,0 +1,2 @@
+accelerate config
+huggingface-cli login
