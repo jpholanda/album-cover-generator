@@ -1,6 +1,8 @@
 import json
+import os
 import pathlib
 import random
+import shutil
 
 
 class DatasetEntry:
@@ -44,8 +46,8 @@ def split_dataset(dataset, train_percentage: float):
     return train_dataset, test_dataset
 
 
-def persist_dataset(dataset, filepath):
-    with open(filepath, 'w') as dataset_file:
+def persist_dataset(dataset, split):
+    with open(f'dataset/huggingface/{split}/metadata.jsonl', 'w') as dataset_file:
         for entry in dataset:
             obj = {
                 'file_name': f'{entry.id}.jpg',
@@ -55,15 +57,23 @@ def persist_dataset(dataset, filepath):
             dataset_file.write('\n')
 
 
-def persist_dataset_ids(dataset, filepath):
-    with open(filepath, 'w') as dataset_ids_file:
-        for entry in dataset:
-            dataset_ids_file.write(entry.id)
-            dataset_ids_file.write('\n')
-
-
 def ensure_directory_exists(directory):
     pathlib.Path(directory).mkdir(parents=True, exist_ok=True)
+
+
+def copy_image(file_name, split):
+    if os.path.exists(f'dataset/huggingface/{split}/{file_name}'):
+        return
+
+    if not os.path.exists(f'dataset/images/{file_name}'):
+        return
+
+    shutil.copy(f'dataset/images/{file_name}', f'dataset/huggingface/{split}/{file_name}')
+
+
+def copy_images(dataset, split):
+    for entry in dataset:
+        copy_image(f'{entry.id}.jpg', split)
 
 
 if __name__ == '__main__':
@@ -74,8 +84,8 @@ if __name__ == '__main__':
     ensure_directory_exists('dataset/huggingface/train')
     ensure_directory_exists('dataset/huggingface/test')
 
-    persist_dataset(train_dataset, 'dataset/huggingface/train/metadata.jsonl')
-    persist_dataset(test_dataset, 'dataset/huggingface/test/metadata.jsonl')
+    persist_dataset(train_dataset, split='train')
+    persist_dataset(test_dataset, split='test')
 
-    persist_dataset_ids(train_dataset, 'dataset/huggingface/train_ids')
-    persist_dataset_ids(test_dataset, 'dataset/huggingface/test_ids')
+    copy_images(train_dataset, split='train')
+    copy_images(test_dataset, split='test')
