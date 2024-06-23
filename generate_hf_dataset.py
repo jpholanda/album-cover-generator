@@ -7,16 +7,20 @@ class DatasetEntry:
     def __init__(self, json_data):
         self.id = json_data['id']
         self.title = json_data["title"]
+        self.type = json_data["type"]
         self.artist = json_data["artist"]
         self.genres = json_data["genres"]
         self.tracklist = json_data["tracklist"]
 
-    def to_text(self):
-        title = f'<title>{self.title}</title>'
-        artist = f'<artist>{self.artist}</artist>'
-        genres = ''.join(f'<genre>{genre}</genre>' for genre in self.genres)
-        tracklist = ''.join(f'<track>{track}</track>' for track in self.tracklist)
-        return f'{title}{artist}{genres}{tracklist}'
+    def get_caption(self):
+        genres_copy = self.genres.copy()
+        random.shuffle(genres_copy)
+        formatted_genres = ', '.join(genres_copy)
+        formatted_tracklist = ', '.join(f'"{track}"' for track in self.tracklist)
+        formatted_type = 'release' if self.type == 'Other' else self.type.lower()
+        genres_article = 'an' if genres_copy[0][0] in ('a', 'e', 'i', 'o', 'u') else 'a'
+
+        return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}", including the songs {formatted_tracklist}'
 
 
 def read_dataset():
@@ -45,7 +49,7 @@ def persist_dataset(dataset, filepath):
         for entry in dataset:
             obj = {
                 'file_name': f'{entry.id}.jpg',
-                'text': entry.to_text()
+                'text': entry.get_caption()
             }
             json.dump(obj, dataset_file)
             dataset_file.write('\n')
