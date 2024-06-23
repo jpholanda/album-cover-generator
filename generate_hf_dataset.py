@@ -20,7 +20,7 @@ class DatasetEntry:
         formatted_type = 'release' if self.type == 'Other' else self.type.lower()
         genres_article = 'an' if genres_copy[0][0] in ('a', 'e', 'i', 'o', 'u') else 'a'
 
-        return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}", including the songs {formatted_tracklist}'
+        return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}", including the songs {formatted_tracklist}'.encode('utf-8')
 
 
 def read_dataset():
