@@ -17,7 +17,7 @@ class DatasetEntry:
         random.shuffle(genres_copy)
         formatted_genres = ', '.join(genres_copy)
         formatted_tracklist = ', '.join(f'"{track}"' for track in self.tracklist)
-        formatted_type = 'release' if self.type == 'Other' else self.type.lower()
+        formatted_type = 'release' if self.type is None or self.type == 'Other' else self.type.lower()
         genres_article = 'an' if genres_copy[0][0] in ('a', 'e', 'i', 'o', 'u') else 'a'
 
         return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}", including the songs {formatted_tracklist}'.encode('utf-8')
