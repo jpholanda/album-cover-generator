@@ -16,6 +16,7 @@ accelerate launch train_text_to_image.py \
   --learning_rate=1e-05 \
   --max_grad_norm=1 \
   --lr_scheduler="constant" --lr_warmup_steps=0 \
+  --checkpoints_total_limit=1 \
   --output_dir=${HUB_MODEL_ID} \
   --push_to_hub \
   --hub_model_id=${HUB_MODEL_ID}
