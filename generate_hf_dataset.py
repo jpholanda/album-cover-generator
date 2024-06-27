@@ -12,23 +12,22 @@ class DatasetEntry:
         self.type = json_data["type"]
         self.artist = json_data["artist"]
         self.genres = json_data["genres"]
-        self.tracklist = json_data["tracklist"]
+        self.release_date = json_data["date"]
 
     def get_caption(self):
         genres_copy = self.genres.copy()
         random.shuffle(genres_copy)
         formatted_genres = ', '.join(genres_copy)
-        formatted_tracklist = ', '.join(f'"{track}"' for track in self.tracklist)
         formatted_type = 'release' if self.type is None or self.type == 'Other' else self.type.lower()
         genres_article = 'an' if genres_copy[0][0] in ('a', 'e', 'i', 'o', 'u') else 'a'
 
-        return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}", including the songs {formatted_tracklist}'
+        return f'Cover art for {genres_article} {formatted_genres} {formatted_type} titled "{self.title}", by "{self.artist}"'
 
 
 def read_dataset():
     dataset = []
 
-    with open('dataset/dataset.jsonl', 'r') as raw_dataset:
+    with open('dataset/dataset.jsonl', 'r', encoding='utf8') as raw_dataset:
         for line in raw_dataset:
             json_data = json.loads(line.strip())
             entry = DatasetEntry(json_data)
@@ -47,13 +46,13 @@ def split_dataset(dataset, train_percentage: float):
 
 
 def persist_dataset(dataset, split):
-    with open(f'dataset/huggingface/{split}/metadata.jsonl', 'w') as dataset_file:
+    with open(f'dataset/huggingface/{split}/metadata.jsonl', 'w', encoding='utf8') as dataset_file:
         for entry in dataset:
             obj = {
                 'file_name': f'{entry.id}.jpg',
                 'text': entry.get_caption()
             }
-            json.dump(obj, dataset_file)
+            json.dump(obj, dataset_file, ensure_ascii=False)
             dataset_file.write('\n')
 
 
