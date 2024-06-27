@@ -4,7 +4,7 @@ export MODEL_NAME="jpholanda/SD-coverart-v1"
 export TRAIN_DIR="dataset/huggingface/all"
 export HUB_MODEL_ID="SD-coverart"
 
-accelerate launch baselines/stable-diffusion/train_text_to_image.py \
+accelerate launch baselines/train_text_to_image.py \
   --pretrained_model_name_or_path=$MODEL_NAME \
   --train_data_dir=$TRAIN_DIR \
   --resolution=250 \
